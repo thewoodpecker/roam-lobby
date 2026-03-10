@@ -1,0 +1,637 @@
+"use client";
+
+import { useState } from "react";
+import InsightsView from "@/components/InsightsView";
+import ScheduleView from "@/components/ScheduleView";
+import LinkDetailView from "@/components/LinkDetailView";
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
+// ─── Icons ───────────────────────────────────────────────
+
+function LobbySignIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M8 1C8.55228 1 9 1.44772 9 2C9 2.24377 8.91154 2.46613 8.7666 2.63965L10.7344 5H11.5996C12.4393 5 12.8598 4.99981 13.1807 5.16309C13.4629 5.3069 13.6931 5.53709 13.8369 5.81934C14.0002 6.14015 14 6.56068 14 7.40039V10.5996C14 11.4393 14.0002 11.8598 13.8369 12.1807L13.7783 12.2842C13.6342 12.5191 13.4276 12.7111 13.1807 12.8369L13.0557 12.8906C12.7488 13.0002 12.3348 13 11.5996 13H4.40039L3.84375 12.9971C3.43727 12.9907 3.16355 12.9689 2.94434 12.8906L2.81934 12.8369C2.53709 12.6931 2.3069 12.4629 2.16309 12.1807C1.99981 11.8598 2 11.4393 2 10.5996V7.40039C2 6.66516 1.99978 6.2512 2.10938 5.94434L2.16309 5.81934C2.28891 5.57239 2.48088 5.3658 2.71582 5.22168L2.81934 5.16309C3.05992 5.04064 3.35641 5.01059 3.84375 5.00293L4.40039 5H5.26562L6.58594 3.41406C6.82582 3.65391 7.1267 3.83122 7.46289 3.9248L6.56738 5H9.43262L7.73535 2.96289C7.31172 2.84672 7 2.46051 7 2C7 1.44772 7.44772 1 8 1ZM4.40039 6C3.96385 6 3.69606 6.00124 3.49609 6.01758C3.40312 6.02518 3.34671 6.03394 3.3125 6.04199C3.29649 6.04576 3.28673 6.04982 3.28125 6.05176C3.27677 6.05336 3.27423 6.0543 3.27344 6.05469C3.17936 6.10262 3.10262 6.17936 3.05469 6.27344C3.0543 6.27423 3.05336 6.27677 3.05176 6.28125C3.04982 6.28673 3.04576 6.29649 3.04199 6.3125C3.03394 6.34671 3.02518 6.40312 3.01758 6.49609C3.00124 6.69605 3 6.96385 3 7.40039V10.5996C3 11.0361 3.00124 11.3039 3.01758 11.5039C3.02518 11.5969 3.03394 11.6533 3.04199 11.6875C3.04576 11.7035 3.04982 11.7133 3.05176 11.7188C3.05336 11.7232 3.0543 11.7258 3.05469 11.7266C3.10262 11.8206 3.17936 11.8974 3.27344 11.9453C3.27423 11.9457 3.27677 11.9466 3.28125 11.9482C3.28673 11.9502 3.29649 11.9542 3.3125 11.958C3.34671 11.9661 3.40312 11.9748 3.49609 11.9824C3.69605 11.9988 3.96385 12 4.40039 12H11.5996C12.0361 12 12.3039 11.9988 12.5039 11.9824C12.5969 11.9748 12.6533 11.9661 12.6875 11.958C12.7035 11.9542 12.7133 11.9502 12.7188 11.9482C12.7232 11.9466 12.7258 11.9457 12.7266 11.9453C12.8206 11.8974 12.8974 11.8206 12.9453 11.7266C12.9457 11.7258 12.9466 11.7232 12.9482 11.7188C12.9502 11.7133 12.9542 11.7035 12.958 11.6875C12.9661 11.6533 12.9748 11.5969 12.9824 11.5039C12.9988 11.3039 13 11.0361 13 10.5996V7.40039C13 6.96385 12.9988 6.69605 12.9824 6.49609C12.9748 6.40312 12.9661 6.34671 12.958 6.3125C12.9542 6.29649 12.9502 6.28673 12.9482 6.28125C12.9466 6.27677 12.9457 6.27423 12.9453 6.27344C12.8974 6.17936 12.8206 6.10262 12.7266 6.05469C12.7258 6.0543 12.7232 6.05336 12.7188 6.05176C12.7133 6.04982 12.7035 6.04576 12.6875 6.04199C12.6533 6.03394 12.5969 6.02518 12.5039 6.01758C12.3039 6.00124 12.0361 6 11.5996 6H4.40039Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function LinkIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6.23223 3.40371C7.98959 1.64635 10.8388 1.64635 12.5962 3.40371C14.3536 5.16107 14.3536 8.01031 12.5962 9.76767L12.2426 10.1212C12.0474 10.3165 11.7308 10.3165 11.5355 10.1212C11.3403 9.92596 11.3403 9.60938 11.5355 9.41412L11.8891 9.06057C13.2559 7.69373 13.2559 5.47765 11.8891 4.11082C10.5223 2.74398 8.30617 2.74398 6.93934 4.11082L6.58578 4.46437C6.39052 4.65964 6.07394 4.65964 5.87868 4.46437C5.68342 4.26911 5.68342 3.95253 5.87868 3.75727L6.23223 3.40371ZM10.1213 5.87859C10.3166 6.07385 10.3166 6.39043 10.1213 6.58569L6.58578 10.1212C6.39052 10.3165 6.07394 10.3165 5.87868 10.1212C5.68342 9.92597 5.68342 9.60938 5.87868 9.41412L9.41421 5.87859C9.60947 5.68332 9.92606 5.68332 10.1213 5.87859ZM4.46446 5.87859C4.65973 6.07385 4.65973 6.39043 4.46446 6.58569L4.11091 6.93925C2.74408 8.30608 2.74408 10.5222 4.11091 11.889C5.47775 13.2558 7.69382 13.2558 9.06066 11.889L9.41421 11.5354C9.60947 11.3402 9.92606 11.3402 10.1213 11.5354C10.3166 11.7307 10.3166 12.0473 10.1213 12.2425L9.76777 12.5961C8.01041 14.3535 5.16116 14.3535 3.4038 12.5961C1.64644 10.8387 1.64645 7.9895 3.4038 6.23214L3.75736 5.87859C3.95262 5.68332 4.2692 5.68332 4.46446 5.87859Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function CalendarIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fillRule="evenodd" clipRule="evenodd" d="M6 1C6 0.723858 5.77614 0.5 5.5 0.5C5.22386 0.5 5 0.723858 5 1V1.50544C4.74737 1.51019 4.52097 1.51908 4.31729 1.53572C3.86949 1.57231 3.48765 1.64884 3.13803 1.82698C2.57354 2.1146 2.1146 2.57354 1.82698 3.13803C1.64884 3.48765 1.57231 3.86949 1.53572 4.31729C1.52097 4.4978 1.51231 4.69616 1.50723 4.91481C1.50248 4.94249 1.5 4.97096 1.5 5C1.5 5.02234 1.50147 5.04434 1.5043 5.0659C1.5 5.33871 1.5 5.64139 1.5 5.97812V10.0219C1.5 10.7034 1.49999 11.2454 1.53572 11.6827C1.57231 12.1305 1.64884 12.5123 1.82698 12.862C2.1146 13.4265 2.57354 13.8854 3.13803 14.173C3.48765 14.3512 3.86949 14.4277 4.31729 14.4643C4.75457 14.5 5.29657 14.5 5.97806 14.5H10.0219C10.7034 14.5 11.2454 14.5 11.6827 14.4643C12.1305 14.4277 12.5123 14.3512 12.862 14.173C13.4265 13.8854 13.8854 13.4265 14.173 12.862C14.3512 12.5123 14.4277 12.1305 14.4643 11.6827C14.5 11.2454 14.5 10.7034 14.5 10.0219V5.97811C14.5 5.6414 14.5 5.3387 14.4957 5.0659C14.4985 5.04434 14.5 5.02234 14.5 5C14.5 4.97096 14.4975 4.9425 14.4928 4.91481C14.4877 4.69616 14.479 4.4978 14.4643 4.31729C14.4277 3.86949 14.3512 3.48765 14.173 3.13803C13.8854 2.57354 13.4265 2.1146 12.862 1.82698C12.5123 1.64884 12.1305 1.57231 11.6827 1.53572C11.479 1.51908 11.2526 1.51019 11 1.50544V1C11 0.723858 10.7761 0.5 10.5 0.5C10.2239 0.5 10 0.723858 10 1V1.5H6V1ZM13.475 4.5C13.4728 4.46543 13.4703 4.43169 13.4676 4.39872C13.4361 4.01276 13.3764 3.77717 13.282 3.59202C13.0903 3.21569 12.7843 2.90973 12.408 2.71799C12.2228 2.62365 11.9872 2.56393 11.6013 2.5324C11.4257 2.51806 11.2282 2.51006 11 2.50561V3C11 3.27614 10.7761 3.5 10.5 3.5C10.2239 3.5 10 3.27614 10 3V2.5H6V3C6 3.27614 5.77614 3.5 5.5 3.5C5.22386 3.5 5 3.27614 5 3V2.50561C4.77176 2.51006 4.57426 2.51806 4.39872 2.5324C4.01276 2.56393 3.77717 2.62365 3.59202 2.71799C3.21569 2.90973 2.90973 3.21569 2.71799 3.59202C2.62365 3.77717 2.56393 4.01276 2.5324 4.39872C2.52971 4.43169 2.52724 4.46543 2.52497 4.5H13.475ZM2.50058 5.5C2.50003 5.65443 2.5 5.82057 2.5 6V10C2.5 10.7083 2.50039 11.2095 2.5324 11.6013C2.56393 11.9872 2.62365 12.2228 2.71799 12.408C2.90973 12.7843 3.21569 13.0903 3.59202 13.282C3.77717 13.3764 4.01276 13.4361 4.39872 13.4676C4.79052 13.4996 5.29168 13.5 6 13.5H10C10.7083 13.5 11.2095 13.4996 11.6013 13.4676C11.9872 13.4361 12.2228 13.3764 12.408 13.282C12.7843 13.0903 13.0903 12.7843 13.282 12.408C13.3764 12.2228 13.4361 11.9872 13.4676 11.6013C13.4996 11.2095 13.5 10.7083 13.5 10V6C13.5 5.82057 13.5 5.65443 13.4994 5.5H2.50058Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function InsightsIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2V12.6667C2 13.0203 2.14048 13.3594 2.39052 13.6095C2.64057 13.8595 2.97971 14 3.33333 14H14" stroke="currentColor" strokeWidth="1.133" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 11.3333V6" stroke="currentColor" strokeWidth="1.133" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.66666 11.3333V3.33325" stroke="currentColor" strokeWidth="1.133" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5.33334 11.3333V9.33325" stroke="currentColor" strokeWidth="1.133" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SettingsIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6.7 1.5H9.3L9.7 3.4C10.1 3.6 10.5 3.8 10.8 4.1L12.7 3.5L14 5.7L12.5 7C12.5 7.3 12.5 7.7 12.5 8L14 9.3L12.7 11.5L10.8 10.9C10.5 11.2 10.1 11.4 9.7 11.6L9.3 13.5H6.7L6.3 11.6C5.9 11.4 5.5 11.2 5.2 10.9L3.3 11.5L2 9.3L3.5 8C3.5 7.7 3.5 7.3 3.5 7L2 5.7L3.3 3.5L5.2 4.1C5.5 3.8 5.9 3.6 6.3 3.4L6.7 1.5Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
+      <circle cx="8" cy="7.5" r="2" stroke="currentColor" strokeWidth="1.1" />
+    </svg>
+  );
+}
+
+function SearchIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M7 2.5C4.51472 2.5 2.5 4.51472 2.5 7C2.5 9.48528 4.51472 11.5 7 11.5C8.11 11.5 9.12488 11.1015 9.90796 10.4397L12.2341 12.7658C12.4293 12.9611 12.7459 12.9611 12.9412 12.7658C13.1365 12.5706 13.1365 12.254 12.9412 12.0587L10.6151 9.73264C11.1527 9.00212 11.5 8.1087 11.5 7C11.5 4.51472 9.48528 2.5 7 2.5ZM3.5 7C3.5 5.067 5.067 3.5 7 3.5C8.933 3.5 10.5 5.067 10.5 7C10.5 8.933 8.933 10.5 7 10.5C5.067 10.5 3.5 8.933 3.5 7Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function PlusIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M8 2.5V13.5M2.5 8H13.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function ClockIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1" />
+      <path d="M8 5.5V8L9.5 9.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function DropInIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M8 2V10M8 10L5 7M8 10L11 7"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3 12H13"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function ExternalLinkIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M10 2H14V6"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 2L8 8"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M6 4H4C2.89543 4 2 4.89543 2 6V12C2 13.1046 2.89543 14 4 14H10C11.1046 14 12 13.1046 12 12V10"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function EllipsisIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="8" cy="3.5" r="1.25" fill="currentColor" />
+      <circle cx="8" cy="8" r="1.25" fill="currentColor" />
+      <circle cx="8" cy="12.5" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
+
+function RoundRobinIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13.5 8C13.5 11.0376 11.0376 13.5 8 13.5C4.96243 13.5 2.5 11.0376 2.5 8C2.5 4.96243 4.96243 2.5 8 2.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      <path d="M11 2L13.5 4.5L11 7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function CollectiveIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="6" cy="5" r="2" stroke="currentColor" strokeWidth="1.1" />
+      <path d="M2 12C2 9.79086 3.79086 8 6 8C8.20914 8 10 9.79086 10 12" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      <circle cx="11" cy="5.5" r="1.5" stroke="currentColor" strokeWidth="1.1" />
+      <path d="M10 8.5C10.9 8.2 12 8.5 13 9.5C13.7 10.2 14 11.1 14 12" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// ─── Toggle ──────────────────────────────────────────────
+
+function Toggle({
+  active,
+  onChange,
+}: {
+  active: boolean;
+  onChange: () => void;
+}) {
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onChange(); }}
+      className={`relative h-5 w-8 rounded-xl transition-colors duration-200 ${
+        active ? "bg-[var(--bg-accented-primary)]" : "bg-[var(--bg-secondary)]"
+      }`}
+    >
+      <div
+        className="absolute top-[2px] left-[2px] size-4 rounded-full bg-white shadow-sm transition-transform duration-200"
+        style={{ transform: active ? "translateX(12px)" : "translateX(0)" }}
+      />
+    </button>
+  );
+}
+
+// ─── Badge ───────────────────────────────────────────────
+
+function Badge({
+  icon,
+  label,
+}: {
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <div className="flex items-center gap-1.5 rounded-lg border border-[var(--border-opaque-primary)] bg-[var(--surface-elevated-primary)] px-[9px] py-px h-6">
+      <span className="text-[var(--text-icon-secondary)]">{icon}</span>
+      <span className="text-xs leading-4 text-[var(--text-icon-secondary)] whitespace-nowrap">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+// ─── Icon Button ─────────────────────────────────────────
+
+function IconButton({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center justify-center size-8 rounded-lg text-[var(--text-icon-secondary)] hover:text-[var(--text-icon-primary)] hover:bg-[var(--bg-primary)] transition-colors"
+    >
+      {children}
+    </button>
+  );
+}
+
+// ─── Link Card ───────────────────────────────────────────
+
+const LOBBY_THUMBS = [`${BASE_PATH}/lobby-thumb.png`, `${BASE_PATH}/lobby-green.png`, `${BASE_PATH}/lobby-purple.png`];
+
+interface LinkCardProps {
+  id: number;
+  name: string;
+  slug: string;
+  duration: string;
+  type?: "Round Robin" | "Collective";
+  dropIn?: boolean;
+  hasThumbnail?: boolean;
+  active: boolean;
+  onToggle: () => void;
+  onClick?: () => void;
+}
+
+function LinkCard({
+  id,
+  name,
+  slug,
+  duration,
+  type,
+  dropIn = false,
+  hasThumbnail = false,
+  active,
+  onToggle,
+  onClick,
+}: LinkCardProps) {
+  return (
+    <div onClick={onClick} className="flex items-center gap-3 px-6 py-2 w-full hover:bg-[var(--bg-primary)] transition-colors group cursor-pointer">
+      {/* Thumbnail */}
+      <div className="relative h-20 w-[120px] shrink-0 rounded-xl overflow-hidden hidden sm:block" style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}>
+        <img src={LOBBY_THUMBS[id % LOBBY_THUMBS.length]} alt="" className="absolute inset-0 size-full object-cover" />
+      </div>
+
+      {/* Info */}
+      <div className="flex flex-col gap-2 flex-1 min-w-0">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">
+            {name}
+          </span>
+          <span className="text-xs leading-4 text-[var(--text-icon-secondary)]">
+            {slug}
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Badge icon={<ClockIcon className="size-4" />} label={duration} />
+          {type && (
+            <Badge
+              icon={type === "Round Robin" ? <RoundRobinIcon className="size-4" /> : <CollectiveIcon className="size-4" />}
+              label={type}
+            />
+          )}
+          {dropIn && (
+            <Badge icon={<DropInIcon className="size-4" />} label="Drop-In" />
+          )}
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-1 shrink-0 h-8">
+        <div className="flex items-center gap-2">
+          {!active && (
+            <span className="text-xs leading-4 text-[var(--text-icon-secondary)]">
+              Hidden
+            </span>
+          )}
+          <Toggle active={active} onChange={onToggle} />
+        </div>
+        <IconButton>
+          <ExternalLinkIcon className="size-4" />
+        </IconButton>
+        <IconButton>
+          <LinkIcon className="size-4" />
+        </IconButton>
+        <IconButton>
+          <EllipsisIcon className="size-4" />
+        </IconButton>
+      </div>
+    </div>
+  );
+}
+
+// ─── Sidebar Nav Item ────────────────────────────────────
+
+function NavItem({
+  icon,
+  label,
+  active = false,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-3 pl-3 py-3 w-full text-left transition-colors ${
+        active
+          ? "bg-[var(--bg-primary)] text-[var(--text-icon-primary)]"
+          : "text-[var(--text-icon-secondary)] hover:text-[var(--text-icon-primary)]"
+      }`}
+    >
+      {icon}
+      <span className="text-sm leading-5 tracking-[-0.15px]">{label}</span>
+    </button>
+  );
+}
+
+// ─── Traffic Lights ──────────────────────────────────────
+
+function TrafficLights() {
+  return (
+    <div className="flex items-center gap-2 px-4 py-3">
+      <div className="size-3 rounded-full bg-[#FF5F57]" />
+      <div className="size-3 rounded-full bg-[#FEBC2E]" />
+      <div className="size-3 rounded-full bg-[#28C840]" />
+    </div>
+  );
+}
+
+// ─── Main Page ───────────────────────────────────────────
+
+interface LinkData {
+  id: number;
+  name: string;
+  slug: string;
+  duration: string;
+  type?: "Round Robin" | "Collective";
+  dropIn: boolean;
+  hasThumbnail: boolean;
+  active: boolean;
+}
+
+export default function LobbyPage() {
+  const [activeNav, setActiveNav] = useState("my-links");
+  const [selectedLinkId, setSelectedLinkId] = useState<{ id: number; source: "my" | "hq" } | null>(null);
+  const [links, setLinks] = useState<LinkData[]>([
+    {
+      id: 1,
+      name: "Secret Meeting",
+      slug: "ro.am/joe/secret",
+      duration: "15m",
+      dropIn: true,
+      hasThumbnail: true,
+      active: true,
+    },
+    {
+      id: 2,
+      name: "8 Minute Meeting",
+      slug: "ro.am/joe/8",
+      duration: "8m",
+      dropIn: false,
+      hasThumbnail: false,
+      active: false,
+    },
+    {
+      id: 3,
+      name: "Design Studio",
+      slug: "ro.am/joe/design-studio",
+      duration: "30m",
+      dropIn: true,
+      hasThumbnail: true,
+      active: false,
+    },
+  ]);
+
+  const [hqLinks, setHqLinks] = useState<LinkData[]>([
+    { id: 1, name: "Founder's Tour", slug: "ro.am/roam/founders-tour", duration: "45m", type: "Round Robin", dropIn: true, hasThumbnail: true, active: true },
+    { id: 2, name: "Schedule Your Onboarding", slug: "ro.am/roam/scheduleonboarding", duration: "15m", type: "Round Robin", dropIn: true, hasThumbnail: false, active: true },
+    { id: 3, name: "Activate Your Roam", slug: "ro.am/roam/activateroam", duration: "30m", type: "Round Robin", dropIn: true, hasThumbnail: true, active: true },
+    { id: 4, name: "Meeting with Team Roam", slug: "ro.am/roam/enterprise", duration: "60m", type: "Collective", dropIn: true, hasThumbnail: false, active: true },
+    { id: 5, name: "Roam HQ's Lobby", slug: "ro.am/roam/calendar", duration: "20m", type: "Collective", dropIn: true, hasThumbnail: true, active: true },
+    { id: 6, name: "Activate Your Roam from Founders Lounge", slug: "ro.am/roam/founderslounge", duration: "30m", type: "Round Robin", dropIn: false, hasThumbnail: false, active: true },
+    { id: 7, name: "Talk to an Expert", slug: "ro.am/roam/talktoroamgineer", duration: "25m", type: "Round Robin", dropIn: true, hasThumbnail: false, active: true },
+    { id: 8, name: "Roam HQ Recruiting", slug: "ro.am/roam/recruiting", duration: "45m", type: "Round Robin", dropIn: true, hasThumbnail: false, active: true },
+    { id: 9, name: "Activate Your Roam", slug: "ro.am/roam/activateyourroam", duration: "30m", type: "Round Robin", dropIn: true, hasThumbnail: true, active: true },
+    { id: 10, name: "Activate Your Roam from SaaStock", slug: "ro.am/roam/activateyourroam-saastock", duration: "15m", type: "Round Robin", dropIn: true, hasThumbnail: false, active: false },
+    { id: 11, name: "Full Team Orientation", slug: "ro.am/roam/tallinger", duration: "90m", type: "Collective", dropIn: false, hasThumbnail: false, active: true },
+    { id: 12, name: "Roam HQ's Round Robin", slug: "ro.am/roam/ghostbusters", duration: "10m", type: "Round Robin", dropIn: true, hasThumbnail: true, active: true },
+  ]);
+
+  const toggleLink = (id: number) => {
+    setLinks((prev) =>
+      prev.map((link) =>
+        link.id === id ? { ...link, active: !link.active } : link
+      )
+    );
+  };
+
+  const toggleHqLink = (id: number) => {
+    setHqLinks((prev) =>
+      prev.map((link) =>
+        link.id === id ? { ...link, active: !link.active } : link
+      )
+    );
+  };
+
+  return (
+    <div className="flex h-screen w-screen bg-[var(--surface-primary)] overflow-hidden">
+      {/* Mobile Icon Nav */}
+      <aside className="flex md:hidden flex-col items-center w-[52px] shrink-0 h-full bg-[var(--surface-raised)] border-r-[0.5px] border-[var(--border-primary)] pt-6 gap-1">
+        {[
+          { icon: <LobbySignIcon className="size-4" />, nav: "my-links" as const },
+          { icon: <LinkIcon className="size-4" />, nav: "hq-links" as const },
+          { icon: <CalendarIcon className="size-4" />, nav: "schedule" as const },
+          { icon: <InsightsIcon className="size-4" />, nav: "insights" as const },
+          { icon: <SettingsIcon className="size-4" />, nav: "calendar-settings" as const },
+        ].map((item) => (
+          <button
+            key={item.nav}
+            onClick={() => { setActiveNav(item.nav); setSelectedLinkId(null); }}
+            className={`flex items-center justify-center size-9 rounded-lg transition-colors ${
+              activeNav === item.nav
+                ? "bg-[var(--bg-primary)] text-[var(--text-icon-primary)]"
+                : "text-[var(--text-icon-secondary)] hover:text-[var(--text-icon-primary)]"
+            }`}
+          >
+            {item.icon}
+          </button>
+        ))}
+      </aside>
+
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex flex-col w-[280px] shrink-0 h-full bg-[var(--surface-raised)] border-r-[0.5px] border-[var(--border-primary)]">
+        <nav className="flex flex-col flex-1 pt-6">
+          <NavItem
+            icon={<LobbySignIcon className="size-4" />}
+            label="My Links"
+            active={activeNav === "my-links"}
+            onClick={() => { setActiveNav("my-links"); setSelectedLinkId(null); }}
+          />
+          <NavItem
+            icon={<LinkIcon className="size-4" />}
+            label="Roam HQ Links"
+            active={activeNav === "hq-links"}
+            onClick={() => { setActiveNav("hq-links"); setSelectedLinkId(null); }}
+          />
+          <NavItem
+            icon={<CalendarIcon className="size-4" />}
+            label="Schedule"
+            active={activeNav === "schedule"}
+            onClick={() => { setActiveNav("schedule"); setSelectedLinkId(null); }}
+          />
+          <NavItem
+            icon={<InsightsIcon className="size-4" />}
+            label="Insights"
+            active={activeNav === "insights"}
+            onClick={() => { setActiveNav("insights"); setSelectedLinkId(null); }}
+          />
+          <NavItem
+            icon={<SettingsIcon className="size-4" />}
+            label="Calendar Settings"
+            active={activeNav === "calendar-settings"}
+            onClick={() => { setActiveNav("calendar-settings"); setSelectedLinkId(null); }}
+          />
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        {selectedLinkId ? (
+          (() => {
+            const source = selectedLinkId.source === "hq" ? hqLinks : links;
+            const link = source.find((l) => l.id === selectedLinkId.id);
+            if (!link) return null;
+            return (
+              <LinkDetailView
+                name={link.name}
+                slug={link.slug}
+                active={link.active}
+                onBack={() => setSelectedLinkId(null)}
+                onToggle={() =>
+                  selectedLinkId.source === "hq"
+                    ? toggleHqLink(link.id)
+                    : toggleLink(link.id)
+                }
+              />
+            );
+          })()
+        ) : activeNav === "insights" ? (
+          <InsightsView />
+        ) : activeNav === "schedule" ? (
+          <ScheduleView />
+        ) : activeNav === "calendar-settings" ? (
+          <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header className="flex items-center justify-between pl-6 pr-3 h-[62px] shrink-0 border-b-[0.5px] border-[var(--border-primary)]">
+              <div className="flex flex-col">
+                <h1 className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Calendar Settings</h1>
+                <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Select calendars to avoid scheduling conflicts and double bookings</span>
+              </div>
+            </header>
+            <div className="flex-1 overflow-y-auto">
+
+                {/* Google Calendar - ro.am */}
+                <div className="flex items-center gap-4 px-6 py-4 border-b-[0.5px] border-[var(--border-primary)] hover:bg-[var(--bg-primary)] transition-colors cursor-pointer">
+                  <div className="size-10 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center shrink-0">
+                    <svg className="size-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 5.2C2 4.0799 2 3.51984 2.21799 3.09202C2.40973 2.71569 2.71569 2.40973 3.09202 2.21799C3.51984 2 4.07989 2 5.2 2H7V22H5.2C4.0799 22 3.51984 22 3.09202 21.782C2.71569 21.5903 2.40973 21.2843 2.21799 20.908C2 20.4802 2 19.9201 2 18.8V5.2Z" fill="#1E88E5"/>
+                      <path d="M2 17H17V22H5.2C4.07989 22 3.51984 22 3.09202 21.782C2.71569 21.5903 2.40973 21.2843 2.21799 20.908C2 20.4802 2 19.9201 2 18.8V17Z" fill="#FBC02D"/>
+                      <path d="M2 5.2C2 4.0799 2 3.51984 2.21799 3.09202C2.40973 2.71569 2.71569 2.40973 3.09202 2.21799C3.51984 2 4.07989 2 5.2 2H18.8C19.9201 2 20.4802 2 20.908 2.21799C21.2843 2.40973 21.5903 2.71569 21.782 3.09202C22 3.51984 22 4.07989 22 5.2V7H2V5.2Z" fill="#1E88E5"/>
+                      <path d="M17 2H18.8C19.9201 2 20.4802 2 20.908 2.21799C21.2843 2.40973 21.5903 2.71569 21.782 3.09202C22 3.51984 22 4.0799 22 5.2V7H17V2Z" fill="#1565C0"/>
+                      <path d="M17 7H22V17H17V7Z" fill="#4CAF50"/>
+                      <path d="M22 17H17V22L22 17Z" fill="#E53935"/>
+                    </svg>
+                  </div>
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Google Calendar</span>
+                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">joe@ro.am</span>
+                    <span className="text-xs leading-4 text-[#4285F4]">Checking 1 calendar</span>
+                  </div>
+                  <svg className="size-4 text-[rgba(255,255,255,0.5)] shrink-0" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+
+                {/* Google Calendar - wonder.inc */}
+                <div className="flex items-center gap-4 px-6 py-4 border-b-[0.5px] border-[var(--border-primary)] hover:bg-[var(--bg-primary)] transition-colors cursor-pointer">
+                  <div className="size-10 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center shrink-0">
+                    <svg className="size-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 5.2C2 4.0799 2 3.51984 2.21799 3.09202C2.40973 2.71569 2.71569 2.40973 3.09202 2.21799C3.51984 2 4.07989 2 5.2 2H7V22H5.2C4.0799 22 3.51984 22 3.09202 21.782C2.71569 21.5903 2.40973 21.2843 2.21799 20.908C2 20.4802 2 19.9201 2 18.8V5.2Z" fill="#1E88E5"/>
+                      <path d="M2 17H17V22H5.2C4.07989 22 3.51984 22 3.09202 21.782C2.71569 21.5903 2.40973 21.2843 2.21799 20.908C2 20.4802 2 19.9201 2 18.8V17Z" fill="#FBC02D"/>
+                      <path d="M2 5.2C2 4.0799 2 3.51984 2.21799 3.09202C2.40973 2.71569 2.71569 2.40973 3.09202 2.21799C3.51984 2 4.07989 2 5.2 2H18.8C19.9201 2 20.4802 2 20.908 2.21799C21.2843 2.40973 21.5903 2.71569 21.782 3.09202C22 3.51984 22 4.07989 22 5.2V7H2V5.2Z" fill="#1E88E5"/>
+                      <path d="M17 2H18.8C19.9201 2 20.4802 2 20.908 2.21799C21.2843 2.40973 21.5903 2.71569 21.782 3.09202C22 3.51984 22 4.0799 22 5.2V7H17V2Z" fill="#1565C0"/>
+                      <path d="M17 7H22V17H17V7Z" fill="#4CAF50"/>
+                      <path d="M22 17H17V22L22 17Z" fill="#E53935"/>
+                    </svg>
+                  </div>
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Google Calendar</span>
+                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">joe@wonder.inc</span>
+                    <span className="text-xs leading-4 text-[#4285F4]">Checking 1 calendar</span>
+                  </div>
+                  <svg className="size-4 text-[rgba(255,255,255,0.5)] shrink-0" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Header */}
+            <header className="flex items-center justify-between pl-6 pr-3 h-[62px] shrink-0 border-b-[0.5px] border-[var(--border-primary)]">
+              <h1 className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">
+                {activeNav === "hq-links" ? "Roam HQ Links" : "My Links"}
+              </h1>
+              <div className="flex items-center gap-3">
+                {/* Search */}
+                <button className="flex items-center gap-2.5 w-[200px] h-9 px-3 rounded-lg bg-[var(--bg-primary)]">
+                  <SearchIcon className="size-4 text-[var(--text-icon-secondary)]" />
+                  <span className="text-sm leading-5 text-[var(--text-icon-secondary)] tracking-[-0.15px]">
+                    Search
+                  </span>
+                </button>
+                {/* New Button */}
+                <button className="flex items-center gap-2 h-9 px-4 rounded-lg bg-white">
+                  <PlusIcon className="size-4 text-black" />
+                  <span className="text-sm leading-5 text-black tracking-[-0.15px]">
+                    New
+                  </span>
+                </button>
+              </div>
+            </header>
+
+            {/* Link List */}
+            <div className="flex flex-col flex-1 py-2 overflow-y-auto">
+              {activeNav === "hq-links"
+                ? hqLinks.map((link) => (
+                    <LinkCard
+                      key={link.id}
+                      id={link.id}
+                      name={link.name}
+                      slug={link.slug}
+                      duration={link.duration}
+                      type={link.type}
+                      dropIn={link.dropIn}
+                      hasThumbnail={link.hasThumbnail}
+                      active={link.active}
+                      onToggle={() => toggleHqLink(link.id)}
+                      onClick={() => setSelectedLinkId({ id: link.id, source: "hq" })}
+                    />
+                  ))
+                : links.map((link) => (
+                    <LinkCard
+                      key={link.id}
+                      id={link.id}
+                      name={link.name}
+                      slug={link.slug}
+                      duration={link.duration}
+                      dropIn={link.dropIn}
+                      hasThumbnail={link.hasThumbnail}
+                      active={link.active}
+                      onToggle={() => toggleLink(link.id)}
+                      onClick={() => setSelectedLinkId({ id: link.id, source: "my" })}
+                    />
+                  ))}
+            </div>
+          </>
+        )}
+      </main>
+    </div>
+  );
+}

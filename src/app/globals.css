@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: var(--font-inter);
+
+  /* --- Graphite Scale --- */
+  --graphite-25: #f9fafa;
+  --graphite-50: #f2f2f3;
+  --graphite-100: #e7e8e9;
+  --graphite-150: #c7c9cc;
+  --graphite-200: #8e9095;
+  --graphite-300: #6a6d71;
+  --graphite-400: #47494d;
+  --graphite-500: #303236;
+  --graphite-600: #27282b;
+  --graphite-700: #1d1e20;
+  --graphite-800: #131415;
+  --graphite-900: #0c0c0e;
+
+  /* --- White Opacity --- */
+  --white-opacity-50: #ffffff0d;
+  --white-opacity-100: #ffffff1a;
+  --white-opacity-150: #ffffff26;
+  --white-opacity-200: #ffffff33;
+  --white-opacity-300: #ffffff4d;
+  --white-opacity-400: #ffffff66;
+  --white-opacity-500: #ffffff80;
+
+  /* --- Indigo --- */
+  --indigo-600: #6e31e7;
+
+  /* --- Text & Icon Semantic Colors --- */
+  --text-icon-primary: #ffffff;
+  --text-icon-secondary: #ffffff80;
+  --text-icon-disabled: #ffffff4d;
+  --text-icon-primary-on-light: #000000;
+
+  /* --- Background Semantic Colors --- */
+  --bg-primary: #ffffff0d;
+  --bg-secondary: #ffffff1a;
+  --bg-accented-primary: #6e31e7;
+  --bg-overlay-secondary: #0000004d;
+
+  /* --- Surface Colors --- */
+  --surface-primary: #0c0c0e;
+  --surface-raised: #131415;
+  --surface-secondary: #ffffff;
+  --surface-elevated-primary: #1d1e20;
+
+  /* --- Border Colors --- */
+  --border-primary: #ffffff1a;
+  --border-opaque-primary: #27282b;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter);
+}
+
+body {
+  font-family: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
