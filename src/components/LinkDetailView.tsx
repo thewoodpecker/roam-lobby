@@ -380,7 +380,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                 </div>
 
                 {/* Theme (disabled when background is off) */}
-                <div className={`flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)] ${!designBg ? "opacity-40 pointer-events-none" : ""}`}
+                <div className={`flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)] ${!designBg ? "opacity-40 pointer-events-none" : ""}`}>
                   <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Theme</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); setDesignTheme(designTheme === "Dark" ? "Light" : "Dark"); }}
