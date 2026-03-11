@@ -346,6 +346,17 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                 className="flex flex-col rounded-xl bg-[var(--surface-raised)] overflow-hidden"
                 style={{ border: "0.5px solid var(--border-opaque-primary, #27282b)" }}
               >
+                {/* Allow Knocks */}
+                <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                  <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Allow Knocks</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setDesignKnocks(!designKnocks); }}
+                    className={`relative h-6 w-10 rounded-full shrink-0 transition-colors duration-200 ${designKnocks ? "bg-[var(--bg-accented-primary)]" : "bg-[rgba(255,255,255,0.1)]"}`}
+                  >
+                    <div className="absolute top-[2px] left-[2px] size-5 rounded-full bg-white shadow-sm transition-transform duration-200" style={{ transform: designKnocks ? "translateX(16px)" : "translateX(0)" }} />
+                  </button>
+                </div>
+
                 {/* Background */}
                 <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
                   <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Background</span>
@@ -476,16 +487,6 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                   </button>
                 </div>
 
-                {/* Allow Knocks */}
-                <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
-                  <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Allow Knocks</span>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setDesignKnocks(!designKnocks); }}
-                    className={`relative h-6 w-10 rounded-full shrink-0 transition-colors duration-200 ${designKnocks ? "bg-[var(--bg-accented-primary)]" : "bg-[rgba(255,255,255,0.1)]"}`}
-                  >
-                    <div className="absolute top-[2px] left-[2px] size-5 rounded-full bg-white shadow-sm transition-transform duration-200" style={{ transform: designKnocks ? "translateX(16px)" : "translateX(0)" }} />
-                  </button>
-                </div>
               </div>
             </div>
           ) : activeSection === "reminders" ? (
