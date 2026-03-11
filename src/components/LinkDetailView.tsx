@@ -230,6 +230,9 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
   const [designSeal, setDesignSeal] = useState(false);
   const [designBadge, setDesignBadge] = useState(false);
   const [designKnocks, setDesignKnocks] = useState(true);
+  const [designWallpaper, setDesignWallpaper] = useState(true);
+  const [designTheme, setDesignTheme] = useState<"Dark" | "Light">("Dark");
+  const [designAccent, setDesignAccent] = useState("#4285F4");
 
   return (
     <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
@@ -354,6 +357,74 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                   </button>
                 </div>
 
+                {/* Wallpaper Texture (disabled when background is off) */}
+                <div className={`flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)] ${!designBg ? "opacity-40 pointer-events-none" : ""}`}>
+                  <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Wallpaper Texture</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setDesignWallpaper(!designWallpaper); }}
+                    className={`relative h-6 w-10 rounded-full shrink-0 transition-colors duration-200 ${designWallpaper ? "bg-[var(--bg-accented-primary)]" : "bg-[rgba(255,255,255,0.1)]"}`}
+                  >
+                    <div className="absolute top-[2px] left-[2px] size-5 rounded-full bg-white shadow-sm transition-transform duration-200" style={{ transform: designWallpaper ? "translateX(16px)" : "translateX(0)" }} />
+                  </button>
+                </div>
+
+                {/* Theme */}
+                <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                  <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Theme</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setDesignTheme(designTheme === "Dark" ? "Light" : "Dark"); }}
+                    className="flex items-center gap-2 text-sm leading-5 text-white tracking-[-0.15px]"
+                  >
+                    <span>{designTheme}</span>
+                    <div className="flex flex-col items-center justify-center size-6 rounded-md border border-[rgba(255,255,255,0.15)]">
+                      <svg className="size-2.5" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 3.5L5 0.5L9 3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <svg className="size-2.5" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 2.5L5 5.5L9 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Accent Color */}
+                <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Accent Color</span>
+                    <div className="flex items-center gap-2">
+                      {[
+                        { color: "#0A0A0A", label: "Black" },
+                        { color: "#FFFFFF", label: "White" },
+                        { color: "#EA4335", label: "Red" },
+                        { color: "#F5A623", label: "Orange" },
+                        { color: "#34A853", label: "Green" },
+                        { color: "#4285F4", label: "Blue" },
+                        { color: "#7B1FA2", label: "Purple" },
+                      ].map(({ color, label }) => (
+                        <button
+                          key={color}
+                          onClick={(e) => { e.stopPropagation(); setDesignAccent(color); }}
+                          className="relative flex items-center justify-center size-6 rounded-full transition-transform hover:scale-110"
+                          style={{ backgroundColor: color, border: color === "#0A0A0A" ? "1px solid rgba(255,255,255,0.2)" : undefined }}
+                          title={label}
+                        >
+                          {designAccent === color && (
+                            <svg className={`size-3 ${color === "#FFFFFF" ? "text-black" : "text-white"}`} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          )}
+                        </button>
+                      ))}
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center justify-center size-6 rounded-full border border-[rgba(255,255,255,0.2)] text-[rgba(255,255,255,0.5)] hover:text-white transition-colors"
+                      >
+                        <svg className="size-3" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 3.5V12.5M3.5 8H12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
                 {/* Add Logo */}
                 <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
                   <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Add Logo</span>
@@ -384,7 +455,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                 </div>
 
                 {/* Roam Seal */}
-                <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                <div className={`flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)] ${!designBg ? "opacity-40 pointer-events-none" : ""}`}>
                   <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Roam Seal</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); setDesignSeal(!designSeal); }}
@@ -395,7 +466,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                 </div>
 
                 {/* Roamaniac Badge */}
-                <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                <div className={`flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)] ${!designBg ? "opacity-40 pointer-events-none" : ""}`}>
                   <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Roamaniac Badge</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); setDesignBadge(!designBadge); }}
@@ -406,7 +477,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                 </div>
 
                 {/* Allow Knocks */}
-                <div className="flex items-center justify-between px-4 py-4">
+                <div className="flex items-center justify-between px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
                   <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Allow Knocks</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); setDesignKnocks(!designKnocks); }}
