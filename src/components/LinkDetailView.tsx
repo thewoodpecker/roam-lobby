@@ -607,7 +607,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
               </div>
 
               {/* Calendar Invitation */}
-              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
+              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)] -mx-4 px-4">
                 <div className="flex items-center justify-between py-4">
                   <span className="text-sm leading-5 text-[rgba(255,255,255,0.5)] tracking-[-0.15px]">Calendar Invitation</span>
                   <ChevronUpIcon className="size-4 text-[rgba(255,255,255,0.5)]" />
@@ -786,7 +786,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
               </div>
 
               {/* Choose Your Lobby Link */}
-              <div className="flex items-center justify-between py-4 border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
+              <div className="flex items-center justify-between py-4 border-t-[0.5px] border-[rgba(255,255,255,0.1)] -mx-4 px-4">
                 <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Choose Your Lobby Link</span>
                 <svg className="size-4 text-[rgba(255,255,255,0.5)]" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
