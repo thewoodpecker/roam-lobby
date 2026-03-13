@@ -149,7 +149,8 @@ function TrendLineChart({
   const ref = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
-  const gradientIds = lines.map((l) => `gradient-${l.dataKey}-${useId()}`);
+  const baseId = useId();
+  const gradientIds = lines.map((l) => `gradient-${l.dataKey}-${baseId}`);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   const PADDING = { top: 12, right: 8, bottom: 4, left: 8 };
@@ -579,10 +580,7 @@ function LobbyLinkTable() {
   const anyHovered = hoverRow !== null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: EASE_OUT_QUART }}
+    <div
       className="rounded-xl overflow-hidden bg-[#1d1e20]"
       style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}
     >
@@ -593,11 +591,8 @@ function LobbyLinkTable() {
         <TableHeader>Drop-Ins</TableHeader>
       </div>
       {lobbyLinks.map((link, i) => (
-        <motion.div
+        <div
           key={link.slug}
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 + i * 0.06, ease: EASE_OUT_QUART }}
           className="grid grid-cols-[1fr_80px_110px_80px] items-center px-5 h-[67px] cursor-default transition-all duration-200"
           style={{
             borderBottom: i < lobbyLinks.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined,
@@ -611,25 +606,22 @@ function LobbyLinkTable() {
             <span className="text-[13px] leading-[19.5px] text-white">{link.name}</span>
             <span className="font-mono text-[11px] text-[rgba(255,255,255,0.4)]">{link.slug}</span>
           </div>
-          <motion.span
-            className="text-lg font-light leading-[27px] text-white tabular-nums"
-            animate={{ scale: hoverRow === i ? 1.05 : 1 }}
-            transition={{ duration: 0.15 }}
+          <span
+            className="text-lg font-light leading-[27px] text-white tabular-nums transition-transform duration-150"
+            style={{ transform: hoverRow === i ? "scale(1.05)" : "scale(1)" }}
           >
             {link.booked}
-          </motion.span>
+          </span>
           <ShowRateBar percent={link.showRate} color={link.showColor} />
-          <motion.span
-            className="text-lg font-light leading-[27px] tabular-nums"
-            style={{ color: BLUE }}
-            animate={{ scale: hoverRow === i ? 1.05 : 1 }}
-            transition={{ duration: 0.15 }}
+          <span
+            className="text-lg font-light leading-[27px] tabular-nums transition-transform duration-150"
+            style={{ color: BLUE, transform: hoverRow === i ? "scale(1.05)" : "scale(1)" }}
           >
             {link.dropIns}
-          </motion.span>
-        </motion.div>
+          </span>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 }
 
@@ -640,10 +632,7 @@ function PersonTable() {
   const anyHovered = hoverRow !== null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT_QUART }}
+    <div
       className="rounded-xl overflow-hidden mb-6 bg-[#1d1e20]"
       style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}
     >
@@ -656,11 +645,8 @@ function PersonTable() {
         <TableHeader>Drop-Ins</TableHeader>
       </div>
       {people.map((person, i) => (
-        <motion.div
+        <div
           key={person.name}
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 + i * 0.06, ease: EASE_OUT_QUART }}
           className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] items-center px-5 h-[59px] cursor-default transition-all duration-200"
           style={{
             borderBottom: i < people.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined,
@@ -671,33 +657,31 @@ function PersonTable() {
           onPointerLeave={() => setHoverRow(null)}
         >
           <div className="flex items-center gap-2.5">
-            <motion.div
-              className="size-[30px] rounded-full flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "rgba(110,49,231,0.15)", border: `1px solid ${ACCENT}` }}
-              animate={{
+            <div
+              className="size-[30px] rounded-full flex items-center justify-center shrink-0 transition-shadow duration-200"
+              style={{
+                backgroundColor: "rgba(110,49,231,0.15)",
+                border: `1px solid ${ACCENT}`,
                 boxShadow: hoverRow === i ? `0 0 12px rgba(110,49,231,0.4)` : "0 0 0px rgba(110,49,231,0)",
               }}
-              transition={{ duration: 0.2 }}
             >
               <span className="font-mono text-[10px] tracking-wider" style={{ color: ACCENT }}>{person.initials}</span>
-            </motion.div>
+            </div>
             <span className="text-[13px] leading-[19.5px] text-white">{person.name}</span>
           </div>
           <span className="text-base font-light leading-6 text-white tabular-nums">{person.booked}</span>
           <span className="text-base font-light leading-6 text-white tabular-nums">{person.completed}</span>
           <span className="text-base font-light leading-6 text-white tabular-nums">{person.cancelled}</span>
           <ShowRateBar percent={person.showRate} color={person.showColor} />
-          <motion.span
-            className="text-base font-light leading-6 tabular-nums"
-            style={{ color: BLUE }}
-            animate={{ scale: hoverRow === i ? 1.05 : 1 }}
-            transition={{ duration: 0.15 }}
+          <span
+            className="text-base font-light leading-6 tabular-nums transition-transform duration-150"
+            style={{ color: BLUE, transform: hoverRow === i ? "scale(1.05)" : "scale(1)" }}
           >
             {person.dropIns}
-          </motion.span>
-        </motion.div>
+          </span>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 }
 
