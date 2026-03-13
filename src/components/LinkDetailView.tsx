@@ -153,6 +153,24 @@ function PaletteIcon({ className = "size-4" }: { className?: string }) {
   );
 }
 
+function FormIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.5 4.5C7.22386 4.5 7 4.72386 7 5C7 5.27614 7.22386 5.5 7.5 5.5H13.5C13.7761 5.5 14 5.27614 14 5C14 4.72386 13.7761 4.5 13.5 4.5H7.5ZM7 11C7 10.7239 7.22386 10.5 7.5 10.5H13.5C13.7761 10.5 14 10.7239 14 11C14 11.2761 13.7761 11.5 13.5 11.5H7.5C7.22386 11.5 7 11.2761 7 11Z" fill="currentColor" />
+      <path d="M5 5C5 5.82843 4.32843 6.5 3.5 6.5C2.67157 6.5 2 5.82843 2 5C2 4.17157 2.67157 3.5 3.5 3.5C4.32843 3.5 5 4.17157 5 5Z" stroke="currentColor" />
+      <path d="M5 11C5 11.8284 4.32843 12.5 3.5 12.5C2.67157 12.5 2 11.8284 2 11C2 10.1716 2.67157 9.5 3.5 9.5C4.32843 9.5 5 10.1716 5 11Z" stroke="currentColor" />
+    </svg>
+  );
+}
+
+function ClockIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 2C11.3137 2 14 4.68629 14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2ZM8 3C5.23858 3 3 5.23858 3 8C3 10.7614 5.23858 13 8 13C10.7614 13 13 10.7614 13 8C13 5.23858 10.7614 3 8 3ZM7.50153 5C7.74699 5 7.95114 5.17688 7.99347 5.41012L8.00153 5.5V8H9.5C9.77614 8 10 8.22386 10 8.5C10 8.74546 9.82312 8.94961 9.58988 8.99194L9.5 9H7.50153C7.25607 9 7.05192 8.82312 7.00958 8.58988L7.00153 8.5V5.5C7.00153 5.22386 7.22538 5 7.50153 5Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
 // ─── Availability Data ───────────────────────────────────
 
 interface DaySchedule {
@@ -295,6 +313,13 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
             onClick={() => setActiveSection("availability")}
           />
           <DetailNavItem
+            icon={<ClockIcon className="size-4" />}
+            label="Scheduling Settings"
+            subtitle="Limits, Date Range"
+            active={activeSection === "scheduling"}
+            onClick={() => setActiveSection("scheduling")}
+          />
+          <DetailNavItem
             icon={<DoorIcon className="size-4" />}
             label="Destination"
             subtitle="Host's Office"
@@ -314,6 +339,13 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
             subtitle="Default Template"
             active={activeSection === "magic-minutes"}
             onClick={() => setActiveSection("magic-minutes")}
+          />
+          <DetailNavItem
+            icon={<FormIcon className="size-4" />}
+            label="Booking Form"
+            subtitle="Invitee Questions"
+            active={activeSection === "booking-form"}
+            onClick={() => setActiveSection("booking-form")}
           />
           <DetailNavItem
             icon={<EllipsisVIcon className="size-4" />}
@@ -647,6 +679,85 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                 </button>
               </div>
             </div>
+          ) : activeSection === "booking-form" ? (
+            /* ─── Booking Form Content ─── */
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm leading-5 text-[rgba(255,255,255,0.5)] tracking-[-0.15px]">Booking Form</span>
+                <button className="p-0.5 rounded-md text-[rgba(255,255,255,0.5)] hover:text-white transition-colors">
+                  <ChevronUpIcon className="size-4" />
+                </button>
+              </div>
+
+              {/* Invitee Questions */}
+              <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)] tracking-[-0.15px]">Invitee Questions</span>
+              <div
+                className="flex flex-col rounded-xl bg-[var(--surface-raised)] overflow-hidden"
+                style={{ border: "0.5px solid var(--border-opaque-primary, #27282b)" }}
+              >
+                {/* Name — locked */}
+                <div className="flex items-center gap-3 px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                  <svg className="size-4 text-[rgba(255,255,255,0.35)] shrink-0" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 6C6 4.89543 6.89543 4 8 4C9.10457 4 10 4.89543 10 6V7H6V6Z" stroke="currentColor" strokeWidth="1.1" />
+                    <rect x="4" y="7" width="8" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.1" />
+                  </svg>
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Name</span>
+                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">One Line</span>
+                  </div>
+                </div>
+
+                {/* Email — locked */}
+                <div className="flex items-center gap-3 px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                  <svg className="size-4 text-[rgba(255,255,255,0.35)] shrink-0" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 6C6 4.89543 6.89543 4 8 4C9.10457 4 10 4.89543 10 6V7H6V6Z" stroke="currentColor" strokeWidth="1.1" />
+                    <rect x="4" y="7" width="8" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.1" />
+                  </svg>
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Email</span>
+                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">Email</span>
+                  </div>
+                </div>
+
+                {/* Notes — draggable */}
+                <div className="flex items-center gap-3 px-4 py-4 border-b-[0.5px] border-[var(--border-primary)]">
+                  <svg className="size-4 text-[rgba(255,255,255,0.35)] shrink-0 cursor-grab" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="6" cy="4" r="1" fill="currentColor" /><circle cx="10" cy="4" r="1" fill="currentColor" />
+                    <circle cx="6" cy="8" r="1" fill="currentColor" /><circle cx="10" cy="8" r="1" fill="currentColor" />
+                    <circle cx="6" cy="12" r="1" fill="currentColor" /><circle cx="10" cy="12" r="1" fill="currentColor" />
+                  </svg>
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Notes</span>
+                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">One Line</span>
+                  </div>
+                  <button className="p-1 text-[rgba(255,255,255,0.35)] hover:text-white transition-colors">
+                    <EllipsisVIcon className="size-4" />
+                  </button>
+                </div>
+
+                {/* Phone Number — draggable */}
+                <div className="flex items-center gap-3 px-4 py-4">
+                  <svg className="size-4 text-[rgba(255,255,255,0.35)] shrink-0 cursor-grab" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="6" cy="4" r="1" fill="currentColor" /><circle cx="10" cy="4" r="1" fill="currentColor" />
+                    <circle cx="6" cy="8" r="1" fill="currentColor" /><circle cx="10" cy="8" r="1" fill="currentColor" />
+                    <circle cx="6" cy="12" r="1" fill="currentColor" /><circle cx="10" cy="12" r="1" fill="currentColor" />
+                  </svg>
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Phone Number</span>
+                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">Phone Number</span>
+                  </div>
+                  <button className="p-1 text-[rgba(255,255,255,0.35)] hover:text-white transition-colors">
+                    <EllipsisVIcon className="size-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Add New Question */}
+              <div className="flex items-center gap-3 px-4 py-3">
+                <PlusSmIcon className="size-4 text-[rgba(255,255,255,0.5)]" />
+                <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Add New Question</span>
+              </div>
+            </div>
           ) : activeSection === "advanced" ? (
             /* ─── Advanced Content ─── */
             <div className="flex flex-col">
@@ -682,13 +793,6 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                 </svg>
               </div>
 
-              {/* Booking Page Options */}
-              <div className="flex items-center justify-between py-4 border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
-                <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Booking Page Options</span>
-                <svg className="size-4 text-[rgba(255,255,255,0.5)]" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
             </div>
           ) : activeSection === "availability" ? (
             /* ─── Availability Content ─── */
@@ -767,12 +871,19 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
               </div>
             </div>
 
-            {/* Date Range */}
-            <div className="flex flex-col">
-              <div className="py-3">
-                <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Date Range</span>
+            </>
+          ) : activeSection === "scheduling" ? (
+            /* ─── Scheduling Settings Content ─── */
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm leading-5 text-[rgba(255,255,255,0.5)] tracking-[-0.15px]">Scheduling Settings</span>
+                <button className="p-0.5 rounded-md text-[rgba(255,255,255,0.5)] hover:text-white transition-colors">
+                  <ChevronUpIcon className="size-4" />
+                </button>
               </div>
 
+              {/* Date Range */}
+              <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)] tracking-[-0.15px]">Date Range</span>
               <div className="flex flex-col gap-3">
                 <span className="text-sm leading-5 text-white tracking-[-0.15px]">Invitees can schedule...</span>
 
@@ -793,64 +904,63 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
                   <div className="size-5 rounded-full border-2 border-[rgba(255,255,255,0.3)]" />
                 </div>
               </div>
-            </div>
 
-            {/* Event Limits */}
-            <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
-              <div className="py-3">
-                <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Event Limits</span>
-              </div>
-
-              <div className="flex flex-col">
-                {/* Buffer Time */}
-                <div className="flex items-center justify-between py-4">
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Buffer Time</span>
-                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">15 mins before, 1 hour after</span>
-                  </div>
-                  <span className="text-sm leading-5 text-white tracking-[-0.15px]">Edit</span>
+              {/* Event Limits */}
+              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
+                <div className="py-3">
+                  <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">Event Limits</span>
                 </div>
 
-                {/* Minimum Notice */}
+                <div className="flex flex-col">
+                  {/* Buffer Time */}
+                  <div className="flex items-center justify-between py-4">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Buffer Time</span>
+                      <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">15 mins before, 1 hour after</span>
+                    </div>
+                    <span className="text-sm leading-5 text-white tracking-[-0.15px]">Edit</span>
+                  </div>
+
+                  {/* Minimum Notice */}
+                  <div className="flex items-center justify-between py-4">
+                    <div className="flex flex-col flex-1 min-w-0 mr-4">
+                      <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Minimum Notice</span>
+                      <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Set the minimum amount of notice that is required</span>
+                    </div>
+                    <span className="text-sm leading-5 text-white tracking-[-0.15px]">16 Hours</span>
+                  </div>
+
+                  {/* Daily Limit */}
+                  <div className="flex items-center justify-between py-4">
+                    <div className="flex flex-col flex-1 min-w-0 mr-4">
+                      <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Daily Limit</span>
+                      <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Set the maximum events allowed per day</span>
+                    </div>
+                    <span className="text-sm leading-5 text-white tracking-[-0.15px]">2</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Options */}
+              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
+                <div className="py-3">
+                  <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">Additional Options</span>
+                </div>
+
                 <div className="flex items-center justify-between py-4">
                   <div className="flex flex-col flex-1 min-w-0 mr-4">
-                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Minimum Notice</span>
-                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Set the minimum amount of notice that is required</span>
+                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Start Time Increments</span>
+                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Set the frequency of available time slots for invitees</span>
                   </div>
-                  <span className="text-sm leading-5 text-white tracking-[-0.15px]">16 Hours</span>
-                </div>
-
-                {/* Daily Limit */}
-                <div className="flex items-center justify-between py-4">
-                  <div className="flex flex-col flex-1 min-w-0 mr-4">
-                    <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Daily Limit</span>
-                    <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Set the maximum events allowed per day</span>
-                  </div>
-                  <span className="text-sm leading-5 text-white tracking-[-0.15px]">2</span>
+                  <button className="flex items-center gap-1.5 pl-2 pr-0.5 py-0.5 rounded-md hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+                    <span className="text-sm leading-5 text-white tracking-[-0.15px]">5 mins</span>
+                    <div className="flex items-center p-0.5 rounded-md bg-[rgba(255,255,255,0.05)]">
+                      <ChevronDownIcon className="size-4 text-[rgba(255,255,255,0.5)]" />
+                    </div>
+                  </button>
                 </div>
               </div>
             </div>
-
-            {/* Additional Options */}
-            <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
-              <div className="py-3">
-                <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Additional Options</span>
-              </div>
-
-              <div className="flex items-center justify-between py-4">
-                <div className="flex flex-col flex-1 min-w-0 mr-4">
-                  <span className="text-sm font-medium leading-5 text-white tracking-[-0.15px]">Start Time Increments</span>
-                  <span className="text-xs leading-4 text-[rgba(255,255,255,0.5)]">Set the frequency of available time slots for invitees</span>
-                </div>
-                <button className="flex items-center gap-1.5 pl-2 pr-0.5 py-0.5 rounded-md hover:bg-[rgba(255,255,255,0.05)] transition-colors">
-                  <span className="text-sm leading-5 text-white tracking-[-0.15px]">5 mins</span>
-                  <div className="flex items-center p-0.5 rounded-md bg-[rgba(255,255,255,0.05)]">
-                    <ChevronDownIcon className="size-4 text-[rgba(255,255,255,0.5)]" />
-                  </div>
-                </button>
-              </div>
-            </div>
-            </>
           ) : activeSection === "destination" ? (
             /* ─── Destination Content ─── */
             <div

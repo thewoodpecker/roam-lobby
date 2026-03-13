@@ -50,8 +50,7 @@ function InsightsIcon({ className = "size-4" }: { className?: string }) {
 function SettingsIcon({ className = "size-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6.7 1.5H9.3L9.7 3.4C10.1 3.6 10.5 3.8 10.8 4.1L12.7 3.5L14 5.7L12.5 7C12.5 7.3 12.5 7.7 12.5 8L14 9.3L12.7 11.5L10.8 10.9C10.5 11.2 10.1 11.4 9.7 11.6L9.3 13.5H6.7L6.3 11.6C5.9 11.4 5.5 11.2 5.2 10.9L3.3 11.5L2 9.3L3.5 8C3.5 7.7 3.5 7.3 3.5 7L2 5.7L3.3 3.5L5.2 4.1C5.5 3.8 5.9 3.6 6.3 3.4L6.7 1.5Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <circle cx="8" cy="7.5" r="2" stroke="currentColor" strokeWidth="1.1" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M6.18725 2C5.27239 2 4.4306 2.49972 3.99251 3.30287L2.08342 6.80287C1.67641 7.54906 1.67641 8.45094 2.08342 9.19713L3.99251 12.6971C4.4306 13.5003 5.27239 14 6.18725 14H9.81272C10.7276 14 11.5694 13.5003 12.0075 12.6971L13.9165 9.19713C14.3236 8.45094 14.3236 7.54906 13.9165 6.80287L12.0075 3.30287C11.5694 2.49972 10.7276 2 9.81272 2H6.18725ZM4.87041 3.78172C5.13326 3.29983 5.63834 3 6.18725 3H9.81272C10.3616 3 10.8667 3.29983 11.1296 3.78172L13.0387 7.28172C13.2829 7.72944 13.2829 8.27056 13.0387 8.71828L11.1296 12.2183C10.8667 12.7002 10.3616 13 9.81272 13H6.18725C5.63834 13 5.13326 12.7002 4.87041 12.2183L2.96132 8.71828C2.71711 8.27056 2.71711 7.72944 2.96132 7.28172L4.87041 3.78172ZM6.99996 8C6.99996 7.44772 7.44768 7 7.99996 7C8.55225 7 8.99996 7.44772 8.99996 8C8.99996 8.55228 8.55225 9 7.99996 9C7.44768 9 6.99996 8.55228 6.99996 8ZM7.99996 6C6.89539 6 5.99996 6.89543 5.99996 8C5.99996 9.10457 6.89539 10 7.99996 10C9.10453 10 9.99996 9.10457 9.99996 8C9.99996 6.89543 9.10453 6 7.99996 6Z" fill="currentColor"/>
     </svg>
   );
 }
@@ -439,7 +438,7 @@ export default function LobbyPage() {
           { icon: <LinkIcon className="size-4" />, nav: "hq-links" as const },
           { icon: <CalendarIcon className="size-4" />, nav: "schedule" as const },
           { icon: <InsightsIcon className="size-4" />, nav: "insights" as const },
-          { icon: <SettingsIcon className="size-4" />, nav: "calendar-settings" as const },
+          { icon: <SettingsIcon className="size-5" />, nav: "calendar-settings" as const },
         ].map((item) => (
           <button
             key={item.nav}
@@ -483,7 +482,7 @@ export default function LobbyPage() {
             onClick={() => { setActiveNav("insights"); setSelectedLinkId(null); }}
           />
           <NavItem
-            icon={<SettingsIcon className="size-4" />}
+            icon={<SettingsIcon className="size-5" />}
             label="Calendar Settings"
             active={activeNav === "calendar-settings"}
             onClick={() => { setActiveNav("calendar-settings"); setSelectedLinkId(null); }}
