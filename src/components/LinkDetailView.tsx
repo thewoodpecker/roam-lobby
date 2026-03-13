@@ -906,7 +906,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
               </div>
 
               {/* Event Limits */}
-              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
+              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)] -mx-4 px-4">
                 <div className="py-3">
                   <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">Event Limits</span>
                 </div>
@@ -942,7 +942,7 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
               </div>
 
               {/* Additional Options */}
-              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)]">
+              <div className="flex flex-col border-t-[0.5px] border-[rgba(255,255,255,0.1)] -mx-4 px-4">
                 <div className="py-3">
                   <span className="text-xs leading-4 text-[rgba(255,255,255,0.4)]">Additional Options</span>
                 </div>
