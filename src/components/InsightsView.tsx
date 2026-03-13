@@ -573,117 +573,6 @@ const people = [
   { initials: "PN", name: "Peter Nguyen", booked: 44, completed: 37, cancelled: 2, showRate: 84, showColor: YELLOW, dropIns: 15 },
 ];
 
-// ─── Lobby Link Table ───────────────────────────────────
-
-function LobbyLinkTable() {
-  const [hoverRow, setHoverRow] = useState<number | null>(null);
-  const anyHovered = hoverRow !== null;
-
-  return (
-    <div
-      className="rounded-xl overflow-hidden bg-[#1d1e20]"
-      style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}
-    >
-      <div className="grid grid-cols-[1fr_80px_110px_80px] px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-        <TableHeader>Lobby</TableHeader>
-        <TableHeader>Booked</TableHeader>
-        <TableHeader>Show Rate</TableHeader>
-        <TableHeader>Drop-Ins</TableHeader>
-      </div>
-      {lobbyLinks.map((link, i) => (
-        <div
-          key={link.slug}
-          className="grid grid-cols-[1fr_80px_110px_80px] items-center px-5 h-[67px] cursor-default transition-all duration-200"
-          style={{
-            borderBottom: i < lobbyLinks.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined,
-            background: hoverRow === i ? "rgba(255,255,255,0.04)" : "transparent",
-            opacity: anyHovered && hoverRow !== i ? 0.5 : 1,
-          }}
-          onPointerEnter={() => setHoverRow(i)}
-          onPointerLeave={() => setHoverRow(null)}
-        >
-          <div className="flex flex-col gap-0.5">
-            <span className="text-[13px] leading-[19.5px] text-white">{link.name}</span>
-            <span className="font-mono text-[11px] text-[rgba(255,255,255,0.4)]">{link.slug}</span>
-          </div>
-          <span
-            className="text-lg font-light leading-[27px] text-white tabular-nums transition-transform duration-150"
-            style={{ transform: hoverRow === i ? "scale(1.05)" : "scale(1)" }}
-          >
-            {link.booked}
-          </span>
-          <ShowRateBar percent={link.showRate} color={link.showColor} />
-          <span
-            className="text-lg font-light leading-[27px] tabular-nums transition-transform duration-150"
-            style={{ color: BLUE, transform: hoverRow === i ? "scale(1.05)" : "scale(1)" }}
-          >
-            {link.dropIns}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─── Person Table ───────────────────────────────────────
-
-function PersonTable() {
-  const [hoverRow, setHoverRow] = useState<number | null>(null);
-  const anyHovered = hoverRow !== null;
-
-  return (
-    <div
-      className="rounded-xl overflow-hidden mb-6 bg-[#1d1e20]"
-      style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}
-    >
-      <div className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-        <TableHeader>Person</TableHeader>
-        <TableHeader>Booked</TableHeader>
-        <TableHeader>Completed</TableHeader>
-        <TableHeader>Cancelled</TableHeader>
-        <TableHeader>Show Rate</TableHeader>
-        <TableHeader>Drop-Ins</TableHeader>
-      </div>
-      {people.map((person, i) => (
-        <div
-          key={person.name}
-          className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] items-center px-5 h-[59px] cursor-default transition-all duration-200"
-          style={{
-            borderBottom: i < people.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined,
-            background: hoverRow === i ? "rgba(255,255,255,0.04)" : "transparent",
-            opacity: anyHovered && hoverRow !== i ? 0.5 : 1,
-          }}
-          onPointerEnter={() => setHoverRow(i)}
-          onPointerLeave={() => setHoverRow(null)}
-        >
-          <div className="flex items-center gap-2.5">
-            <div
-              className="size-[30px] rounded-full flex items-center justify-center shrink-0 transition-shadow duration-200"
-              style={{
-                backgroundColor: "rgba(110,49,231,0.15)",
-                border: `1px solid ${ACCENT}`,
-                boxShadow: hoverRow === i ? `0 0 12px rgba(110,49,231,0.4)` : "0 0 0px rgba(110,49,231,0)",
-              }}
-            >
-              <span className="font-mono text-[10px] tracking-wider" style={{ color: ACCENT }}>{person.initials}</span>
-            </div>
-            <span className="text-[13px] leading-[19.5px] text-white">{person.name}</span>
-          </div>
-          <span className="text-base font-light leading-6 text-white tabular-nums">{person.booked}</span>
-          <span className="text-base font-light leading-6 text-white tabular-nums">{person.completed}</span>
-          <span className="text-base font-light leading-6 text-white tabular-nums">{person.cancelled}</span>
-          <ShowRateBar percent={person.showRate} color={person.showColor} />
-          <span
-            className="text-base font-light leading-6 tabular-nums transition-transform duration-150"
-            style={{ color: BLUE, transform: hoverRow === i ? "scale(1.05)" : "scale(1)" }}
-          >
-            {person.dropIns}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 // ─── Main Component ─────────────────────────────────────
 
@@ -766,11 +655,64 @@ export default function InsightsView() {
 
         {/* By Lobby Link */}
         <SectionLabel>By Lobby Link</SectionLabel>
-        <LobbyLinkTable />
+        <div className="rounded-xl overflow-hidden bg-[#1d1e20]" style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}>
+          <div className="grid grid-cols-[1fr_80px_110px_80px] px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+            <TableHeader>Lobby</TableHeader>
+            <TableHeader>Booked</TableHeader>
+            <TableHeader>Show Rate</TableHeader>
+            <TableHeader>Drop-Ins</TableHeader>
+          </div>
+          {lobbyLinks.map((link, i) => (
+            <div
+              key={link.slug}
+              className="grid grid-cols-[1fr_80px_110px_80px] items-center px-5 h-[67px]"
+              style={{ borderBottom: i < lobbyLinks.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined }}
+            >
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[13px] text-white">{link.name}</span>
+                <span className="font-mono text-[11px] text-[rgba(255,255,255,0.4)]">{link.slug}</span>
+              </div>
+              <span className="text-lg font-light text-white tabular-nums">{link.booked}</span>
+              <ShowRateBar percent={link.showRate} color={link.showColor} />
+              <span className="text-lg font-light tabular-nums" style={{ color: BLUE }}>{link.dropIns}</span>
+            </div>
+          ))}
+        </div>
 
         {/* By Person */}
         <SectionLabel>By Person</SectionLabel>
-        <PersonTable />
+        <div className="rounded-xl overflow-hidden mb-6 bg-[#1d1e20]" style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}>
+          <div className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+            <TableHeader>Person</TableHeader>
+            <TableHeader>Booked</TableHeader>
+            <TableHeader>Completed</TableHeader>
+            <TableHeader>Cancelled</TableHeader>
+            <TableHeader>Show Rate</TableHeader>
+            <TableHeader>Drop-Ins</TableHeader>
+          </div>
+          {people.map((person, i) => (
+            <div
+              key={person.name}
+              className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] items-center px-5 h-[59px]"
+              style={{ borderBottom: i < people.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined }}
+            >
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="size-[30px] rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: "rgba(110,49,231,0.15)", border: `1px solid ${ACCENT}` }}
+                >
+                  <span className="font-mono text-[10px] tracking-wider" style={{ color: ACCENT }}>{person.initials}</span>
+                </div>
+                <span className="text-[13px] text-white">{person.name}</span>
+              </div>
+              <span className="text-base font-light text-white tabular-nums">{person.booked}</span>
+              <span className="text-base font-light text-white tabular-nums">{person.completed}</span>
+              <span className="text-base font-light text-white tabular-nums">{person.cancelled}</span>
+              <ShowRateBar percent={person.showRate} color={person.showColor} />
+              <span className="text-base font-light tabular-nums" style={{ color: BLUE }}>{person.dropIns}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
