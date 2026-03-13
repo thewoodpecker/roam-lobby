@@ -575,16 +575,13 @@ const people = [
 // ─── Lobby Link Table ───────────────────────────────────
 
 function LobbyLinkTable() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
   const [hoverRow, setHoverRow] = useState<number | null>(null);
   const anyHovered = hoverRow !== null;
 
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 12 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: EASE_OUT_QUART }}
       className="rounded-xl overflow-hidden bg-[#1d1e20]"
       style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}
@@ -599,7 +596,7 @@ function LobbyLinkTable() {
         <motion.div
           key={link.slug}
           initial={{ opacity: 0, x: -8 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.1 + i * 0.06, ease: EASE_OUT_QUART }}
           className="grid grid-cols-[1fr_80px_110px_80px] items-center px-5 h-[67px] cursor-default transition-all duration-200"
           style={{
@@ -639,17 +636,14 @@ function LobbyLinkTable() {
 // ─── Person Table ───────────────────────────────────────
 
 function PersonTable() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
   const [hoverRow, setHoverRow] = useState<number | null>(null);
   const anyHovered = hoverRow !== null;
 
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 12 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: EASE_OUT_QUART }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT_QUART }}
       className="rounded-xl overflow-hidden mb-6 bg-[#1d1e20]"
       style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}
     >
@@ -665,8 +659,8 @@ function PersonTable() {
         <motion.div
           key={person.name}
           initial={{ opacity: 0, x: -8 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 + i * 0.06, ease: EASE_OUT_QUART }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 + i * 0.06, ease: EASE_OUT_QUART }}
           className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] items-center px-5 h-[59px] cursor-default transition-all duration-200"
           style={{
             borderBottom: i < people.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined,
