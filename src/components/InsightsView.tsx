@@ -567,10 +567,12 @@ const lobbyLinks = [
   { name: "Onboard Your Company", slug: "ro.am/howard/roamgineer", booked: 38, showRate: 97, showColor: GREEN, dropIns: 5 },
 ];
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 const people = [
-  { initials: "HL", name: "Howard Lerman", booked: 89, completed: 78, cancelled: 6, showRate: 88, showColor: YELLOW, dropIns: 34 },
-  { initials: "AW", name: "Aaron Wadhwa", booked: 52, completed: 46, cancelled: 4, showRate: 88, showColor: YELLOW, dropIns: 15 },
-  { initials: "PN", name: "Peter Nguyen", booked: 44, completed: 37, cancelled: 2, showRate: 84, showColor: YELLOW, dropIns: 15 },
+  { avatar: `${BASE_PATH}/howard.png`, initials: "HL", name: "Howard Lerman", booked: 89, completed: 78, cancelled: 6, showRate: 88, showColor: YELLOW, dropIns: 34 },
+  { avatar: `${BASE_PATH}/chelsea.png`, initials: "CT", name: "Chelsea Turbin", booked: 52, completed: 46, cancelled: 4, showRate: 88, showColor: YELLOW, dropIns: 15 },
+  { avatar: `${BASE_PATH}/huffy.png`, initials: "HS", name: "Huffy Smith", booked: 44, completed: 37, cancelled: 2, showRate: 84, showColor: YELLOW, dropIns: 15 },
 ];
 
 
@@ -655,63 +657,78 @@ export default function InsightsView() {
 
         {/* By Lobby Link */}
         <SectionLabel>By Lobby Link</SectionLabel>
-        <div className="rounded-xl overflow-hidden bg-[#1d1e20]" style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}>
-          <div className="grid grid-cols-[1fr_80px_110px_80px] px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-            <TableHeader>Lobby</TableHeader>
-            <TableHeader>Booked</TableHeader>
-            <TableHeader>Show Rate</TableHeader>
-            <TableHeader>Drop-Ins</TableHeader>
-          </div>
-          {lobbyLinks.map((link, i) => (
-            <div
-              key={link.slug}
-              className="grid grid-cols-[1fr_80px_110px_80px] items-center px-5 h-[67px]"
-              style={{ borderBottom: i < lobbyLinks.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined }}
-            >
-              <div className="flex flex-col gap-0.5">
-                <span className="text-[13px] text-white">{link.name}</span>
-                <span className="font-mono text-[11px] text-[rgba(255,255,255,0.4)]">{link.slug}</span>
-              </div>
-              <span className="text-lg font-light text-white tabular-nums">{link.booked}</span>
-              <ShowRateBar percent={link.showRate} color={link.showColor} />
-              <span className="text-lg font-light tabular-nums" style={{ color: BLUE }}>{link.dropIns}</span>
-            </div>
-          ))}
+        <div style={{ background: "#1d1e20", border: "0.5px solid rgba(255,255,255,0.1)", borderRadius: 16, padding: 20 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Lobby</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Booked</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Show Rate</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Drop-Ins</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lobbyLinks.map((link, i) => (
+                <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                  <td style={{ padding: "16px 0" }}>
+                    <div style={{ color: "white", fontSize: 13 }}>{link.name}</div>
+                    <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontFamily: "monospace", marginTop: 2 }}>{link.slug}</div>
+                  </td>
+                  <td style={{ color: "white", fontSize: 13 }}>{link.booked}</td>
+                  <td>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.1)", overflow: "hidden" }}>
+                        <div style={{ width: `${link.showRate}%`, height: "100%", borderRadius: 2, background: link.showColor }} />
+                      </div>
+                      <span style={{ color: link.showColor, fontSize: 11, fontFamily: "monospace" }}>{link.showRate}%</span>
+                    </div>
+                  </td>
+                  <td style={{ color: BLUE, fontSize: 13 }}>{link.dropIns}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* By Person */}
         <SectionLabel>By Person</SectionLabel>
-        <div className="rounded-xl overflow-hidden mb-6 bg-[#1d1e20]" style={{ border: "0.5px solid rgba(255,255,255,0.1)" }}>
-          <div className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-            <TableHeader>Person</TableHeader>
-            <TableHeader>Booked</TableHeader>
-            <TableHeader>Completed</TableHeader>
-            <TableHeader>Cancelled</TableHeader>
-            <TableHeader>Show Rate</TableHeader>
-            <TableHeader>Drop-Ins</TableHeader>
-          </div>
-          {people.map((person, i) => (
-            <div
-              key={person.name}
-              className="grid grid-cols-[1fr_70px_90px_80px_100px_70px] items-center px-5 h-[59px]"
-              style={{ borderBottom: i < people.length - 1 ? "1px solid rgba(255,255,255,0.04)" : undefined }}
-            >
-              <div className="flex items-center gap-2.5">
-                <div
-                  className="size-[30px] rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: "rgba(110,49,231,0.15)", border: `1px solid ${ACCENT}` }}
-                >
-                  <span className="font-mono text-[10px] tracking-wider" style={{ color: ACCENT }}>{person.initials}</span>
-                </div>
-                <span className="text-[13px] text-white">{person.name}</span>
-              </div>
-              <span className="text-base font-light text-white tabular-nums">{person.booked}</span>
-              <span className="text-base font-light text-white tabular-nums">{person.completed}</span>
-              <span className="text-base font-light text-white tabular-nums">{person.cancelled}</span>
-              <ShowRateBar percent={person.showRate} color={person.showColor} />
-              <span className="text-base font-light tabular-nums" style={{ color: BLUE }}>{person.dropIns}</span>
-            </div>
-          ))}
+        <div style={{ background: "#1d1e20", border: "0.5px solid rgba(255,255,255,0.1)", borderRadius: 16, padding: 20, marginBottom: 24 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Person</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Booked</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Completed</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Cancelled</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Show Rate</th>
+                <th style={{ textAlign: "left", color: "rgba(255,255,255,0.5)", fontSize: 11, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.05em", paddingBottom: 12 }}>Drop-Ins</th>
+              </tr>
+            </thead>
+            <tbody>
+              {people.map((person, i) => (
+                <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                  <td style={{ padding: "14px 0" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <img src={person.avatar} alt={person.name} style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", flexShrink: 0, }} />
+                      <span style={{ color: "white", fontSize: 13 }}>{person.name}</span>
+                    </div>
+                  </td>
+                  <td style={{ color: "white", fontSize: 13 }}>{person.booked}</td>
+                  <td style={{ color: "white", fontSize: 13 }}>{person.completed}</td>
+                  <td style={{ color: "white", fontSize: 13 }}>{person.cancelled}</td>
+                  <td>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.1)", overflow: "hidden" }}>
+                        <div style={{ width: `${person.showRate}%`, height: "100%", borderRadius: 2, background: person.showColor }} />
+                      </div>
+                      <span style={{ color: person.showColor, fontSize: 11, fontFamily: "monospace" }}>{person.showRate}%</span>
+                    </div>
+                  </td>
+                  <td style={{ color: BLUE, fontSize: 13 }}>{person.dropIns}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
