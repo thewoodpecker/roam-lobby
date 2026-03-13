@@ -292,18 +292,18 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
         {/* Detail Sidebar */}
         <div className="hidden md:flex flex-col w-[280px] shrink-0 py-4 border-r-[0.5px] border-[var(--border-primary)]">
           <DetailNavItem
-            icon={<PaletteIcon className="size-4" />}
-            label="Design"
-            subtitle="Lobby Customization"
-            active={activeSection === "design"}
-            onClick={() => setActiveSection("design")}
-          />
-          <DetailNavItem
             icon={<LinkChainIcon className="size-4" />}
             label="Basics"
             subtitle={slug}
             active={activeSection === "basics"}
             onClick={() => setActiveSection("basics")}
+          />
+          <DetailNavItem
+            icon={<PaletteIcon className="size-4" />}
+            label="Design"
+            subtitle="Lobby Customization"
+            active={activeSection === "design"}
+            onClick={() => setActiveSection("design")}
           />
           <DetailNavItem
             icon={<CalendarIcon className="size-4" />}
@@ -327,6 +327,13 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
             onClick={() => setActiveSection("destination")}
           />
           <DetailNavItem
+            icon={<FormIcon className="size-4" />}
+            label="Booking Form"
+            subtitle="Invitee Questions"
+            active={activeSection === "booking-form"}
+            onClick={() => setActiveSection("booking-form")}
+          />
+          <DetailNavItem
             icon={<BellIcon className="size-4" />}
             label="Reminders"
             subtitle="Email, SMS"
@@ -339,13 +346,6 @@ export default function LinkDetailView({ name, slug, active, onBack, onToggle }:
             subtitle="Default Template"
             active={activeSection === "magic-minutes"}
             onClick={() => setActiveSection("magic-minutes")}
-          />
-          <DetailNavItem
-            icon={<FormIcon className="size-4" />}
-            label="Booking Form"
-            subtitle="Invitee Questions"
-            active={activeSection === "booking-form"}
-            onClick={() => setActiveSection("booking-form")}
           />
           <DetailNavItem
             icon={<EllipsisVIcon className="size-4" />}
